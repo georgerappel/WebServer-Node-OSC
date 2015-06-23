@@ -1,0 +1,141 @@
+<html>
+<head>
+  <title>Socket.io</title>
+   <link rel="stylesheet" href="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+  <script>
+  $(document).ready(function(){
+    var i = 0;
+    var coord_x = [];
+    var coord_y = [];
+    var hora = ["","","","","","","","",""];
+    var temperatura = [0,0,0,0,0,0,0,0,0];
+    var tamanho_max = 9;
+    var socket = io();
+    socket.on('novasCoordenadas',function(msgAddr, valorX, valorY){
+      //setCookie(valorX, valorY);
+      coord_x.push(valorX);
+      coord_y.push(valorY);
+      if(coord_x.length > 9){
+        coord_x.shift();
+        coord_y.shift();
+      }
+      $("#divVisualizacao").text("");
+      $("#divVisualizacao").append("<b>Endereço OSC: </b>" + msgAddr + ".");
+      $("#divVisualizacao").append("<br><b>Valores de X: </b>" + coord_x);
+      $("#divVisualizacao").append("<br><b>Valores de Y: </b>" + coord_y);
+      $("#divVisualizacao").append("<br><b>Temperaturas: </b>" + temperatura);
+      var a_canvas = document.getElementById("mapaAbelhas");
+      var context = a_canvas.getContext("2d");
+      var abelha = document.getElementById("imgAbelha");
+      context.rect(0,0,300,300);
+      context.fillStyle="white";
+      context.fill();
+      context.fillStyle="black";
+      for(i = 0; i < coord_x.length; i++){
+        context.beginPath();
+        context.drawImage(abelha, coord_x[i], coord_y[i]);
+        context.fill();
+      }
+    });
+
+    socket.on('novaTemperatura', function(temp){
+      $("#divTemperatura").text("");
+      $("#divTemperatura").append(temp + " °C");
+      var inseriu = 0;
+      var d = new Date();
+      var horario = "";
+      if(d.getMinutes() < 10)
+        horario = d.getHours() + ":0" + d.getMinutes();
+      else
+        horario = d.getHours() + ":" + d.getMinutes();
+      for(i = 0; i < 9; i++){
+        if(temperatura[i] === 0){
+          temperatura[i] = temp;
+          hora[i] = horario;
+          inseriu = 1;
+          i = 10;
+        }
+      }
+      if(inseriu === 0){
+        for(i = 0; i < 8; i++){
+          temperatura[i] = temperatura[i+1];
+          hora[i] = hora[i+1];
+        }
+        temperatura[8] = temp;
+        hora[8] = horario;
+      }
+      
+      // ======= GRAFICO DE TEMPERATURA ======== //
+      var data = {
+          labels: hora,
+          series: temperatura
+        };
+
+        // We are setting a few options for our chart and override the defaults
+        var options = {
+          height: 300,
+          // Draw the line chart points
+          showPoint: true,
+          // Disable line smoothing
+          lineSmooth: false,
+          // X-Axis specific configuration
+          axisX: {
+            // We can disable the grid for this axis
+            showGrid: false,
+            // and also don't show the label
+            showLabel: false
+          },
+          // Y-Axis specific configuration
+          axisY: {
+            // Lets offset the chart a bit from the labels
+            offset: 60,
+            // The label interpolation function enables you to modify the values
+            // used for the labels on each axis. Here we are converting the
+            // values into million pound.
+            labelInterpolationFnc: function(value) {
+              return value + '°C';
+            }
+          }
+        };
+
+        // All you need to do is pass your configuration as third parameter to the chart function
+        new Chartist.Line('.ct-chart', data, options);
+    });
+});
+</script>  
+</head>
+<body>
+  <div id="titulo" style = "padding:5%;">
+    <center>
+      <h1>SHAST</h1>
+    </center>
+  </div>
+  <div class="ct-chart ct-double-octave" style="display:none;"></div>
+  <center>
+    <div id = "divVisualizacao" style = "width: 60%; min-height: 120px; margin-top: -40px; margin-bottom: 20px; background:#EEE; border-radius:6px; font-size:18px;">
+    </div>
+    <div id="main" width="90%">
+      <div style="float:left; min-width:8%;">&nbsp;</div>
+      <div style="float:left; width:45%;">
+        <img id="imgAbelha" src="abelha.png" style="display: none;"/>
+        <canvas id="mapaAbelhas" width="300px" height="300px" style="border:2px solid #d3d3d3;">
+          Your browser doesn't support HTML5.</canvas>
+        </div>
+        <div style="float:left; min-width:40%;">
+          <center>
+            <h2>Temperatura:</h2>
+            <div id="divTemperatura">0 °C</div>
+            <br>
+            <br><br>
+            <h2>Umidade:</h2>
+            <div id="divUmidade">0%</div>
+
+          </center>
+        </div>
+      </div>
+    </center>
+  </body>
+  </html>

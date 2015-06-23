@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>Socket.io</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <script src = "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script>
+  $(document).ready(function(){
+    var socket = io();
+    socket.on('expLumin',function(msgAddr, valor){
+      if(msgAddr.endsWith('/luminosidade')){
+        $("#valorLumin").text("");
+        // O metodo append permite uso de tags html. O text é usado para limpar o conteudo atual.
+        $("#valorLumin").append("<b>Endereço OSC: </b>" + msgAddr + ".");
+        $("#valorLumin").append("<br><b>Leitura: </b>" + valor);
+      }
+      if(msgAddr.endsWith('/temperatura')){
+        $("#temperatura").text("");
+        $("#temperatura").append("<b>Endereço OSC: </b>" + msgAddr + ".");
+        $("#temperatura").append("<br><b>Temperatura ambiente: </b>" + valor);
+      }
+    });
+  });
+  </script>
+</head>
+<body>
+  <div id="titulo" style = "padding:5%;">
+    <center>
+    <h1>Luminosidade</h1>
+  </center>
+  </div>
+  <center>
+  <div id = "valorLumin" class = "jumbotron"
+    style = "width: 38%; min-height: 100px; padding: 2%; margin-top: -30px;">
+  </div>
+   <div id = "temperatura" class = "jumbotron"
+    style = "width: 38%; min-height: 100px; padding: 2%; margin-top: -30px;">
+  </div>
+</center>
+</body>
+</html>
