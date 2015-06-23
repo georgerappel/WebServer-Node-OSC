@@ -9,7 +9,7 @@ Then, do this:
 <li>Type "node server.js" and a message will apear telling you that its hoster on port 3000.</li>
 <li>On your browser, type "localhost:3000" and you'll se a list of projects. Select the one you desire.</li>
 <li>Open another terminal, 'cd' to the same folder and type "node tsend.js" to send OSC messages to your server.</li>
-<li>The random values will apear on the screen. Read the code and modify as you want to get your desired results.<~li>
+<li>The random values will apear on the screen. Read the code and modify as you want to get your desired results.</li>
 </ol>
 <br>
 <h3>About server.js and tsend.js</h3>
