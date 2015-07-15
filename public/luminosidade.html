@@ -8,17 +8,16 @@
   <script>
   $(document).ready(function(){
     var socket = io();
-    socket.on('expLumin',function(msgAddr, valor){
+    socket.on('expLumin',function(msgAddr, value){
       if(msgAddr.endsWith('/luminosidade')){
         $("#valorLumin").text("");
-        // O metodo append permite uso de tags html. O text é usado para limpar o conteudo atual.
-        $("#valorLumin").append("<b>Endereço OSC: </b>" + msgAddr + ".");
-        $("#valorLumin").append("<br><b>Leitura: </b>" + valor);
+        $("#valorLumin").append("<b>OSC Adress: </b>" + msgAddr + ".");
+        $("#valorLumin").append("<br><b>Value: </b>" + value);
       }
       if(msgAddr.endsWith('/temperatura')){
         $("#temperatura").text("");
-        $("#temperatura").append("<b>Endereço OSC: </b>" + msgAddr + ".");
-        $("#temperatura").append("<br><b>Temperatura ambiente: </b>" + valor);
+        $("#temperatura").append("<b>OSC Adress: </b>" + msgAddr + ".");
+        $("#temperatura").append("<br><b>Temperature: </b>" + value);
       }
     });
   });
