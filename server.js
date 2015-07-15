@@ -31,6 +31,9 @@ app.get('/shast', function(req, res) {
 oscServer.on("message",function(msg, rinfo){
   console.log("Message:");
   console.log(msg[0] + ": " + msg[1]);
+  // io.emit will send a code (e.g. 'expLumin') that will be received by
+  // all the pages with the parameters. You choose what to do on each necessary
+  // HTML page. (See 'shast.html' code for more information).
   if(msg[0].substring(0, 6) == '/lumin')
     io.emit('expLumin',msg[0], msg[1]);
   else if (msg[0].substring(0,4) == '/led')
