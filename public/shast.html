@@ -14,6 +14,7 @@
     var temperatura = [0,0,0,0,0,0,0,0,0];
     var tamanho_max = 9;
     var socket = io();
+    // When the server.js file sends 'novasCoordenadas' this function will run.
     socket.on('novasCoordenadas',function(msgAddr, valorX, valorY){
       //setCookie(valorX, valorY);
       coord_x.push(valorX);
@@ -34,13 +35,13 @@
       context.fillStyle="white";
       context.fill();
       context.fillStyle="black";
+      // Draw a Bee on each saved position.
       for(i = 0; i < coord_x.length; i++){
         context.beginPath();
         context.drawImage(abelha, coord_x[i], coord_y[i]);
         context.fill();
       }
     });
-
     socket.on('novaTemperatura', function(temp){
       $("#divTemperatura").text("");
       $("#divTemperatura").append(temp + " °C");
@@ -67,43 +68,6 @@
         temperatura[8] = temp;
         hora[8] = horario;
       }
-      
-      // ======= GRAFICO DE TEMPERATURA ======== //
-      var data = {
-          labels: hora,
-          series: temperatura
-        };
-
-        // We are setting a few options for our chart and override the defaults
-        var options = {
-          height: 300,
-          // Draw the line chart points
-          showPoint: true,
-          // Disable line smoothing
-          lineSmooth: false,
-          // X-Axis specific configuration
-          axisX: {
-            // We can disable the grid for this axis
-            showGrid: false,
-            // and also don't show the label
-            showLabel: false
-          },
-          // Y-Axis specific configuration
-          axisY: {
-            // Lets offset the chart a bit from the labels
-            offset: 60,
-            // The label interpolation function enables you to modify the values
-            // used for the labels on each axis. Here we are converting the
-            // values into million pound.
-            labelInterpolationFnc: function(value) {
-              return value + '°C';
-            }
-          }
-        };
-
-        // All you need to do is pass your configuration as third parameter to the chart function
-        new Chartist.Line('.ct-chart', data, options);
-    });
 });
 </script>  
 </head>
@@ -113,9 +77,6 @@
       <h1>SHAST</h1>
     </center>
   </div>
-  <!-- // ---- Div do grafico
-  <div class="ct-chart ct-double-octave" style="display:none;"></div>
-  -->
   <center>
     <div id = "divVisualizacao" style = "width: 60%; min-height: 120px; margin-top: -40px; margin-bottom: 20px; background:#EEE; border-radius:6px; font-size:18px;">
     </div>
