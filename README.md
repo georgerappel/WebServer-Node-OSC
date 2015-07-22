@@ -1,5 +1,7 @@
 # WebServer-Node-OSC
-Small Node.JS server with Node-OSC to receive data from Arduino and show them.
+Used to show data from SHAST project: https://github.com/hiperorganicos/SHAST
+
+Small Node.JS server with Node-OSC to receive data from an Arduino board and show them on a HTML page.
 <br>
 <H2>How to use</h2>
 First, you need to install Node.js, express, socket.io and Node-osc.<br>
