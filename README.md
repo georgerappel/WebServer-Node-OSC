@@ -1,6 +1,8 @@
 # WebServer-Node-OSC
 Used to show data from SHAST project: https://github.com/hiperorganicos/SHAST
 
+<img src="screenshot.png" alt="">
+
 Small Node.JS server with Node-OSC to receive data from an Arduino board and show them on a HTML page.
 <br>
 <H2>How to use</h2>
